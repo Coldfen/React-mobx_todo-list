@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
+import Task from "./components/Task"
+import TaskInput from "./components/TaskInput"
+import store from "./store"
+import { observer } from "mobx-react"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  render() {
+    const { sortedTasks, activeTasks } = store
+
+    return(
+      <div className="app">
+        <h1 className="top">
+          Active tasks: { activeTasks }
+        </h1>
+       { sortedTasks.map(el => (
+          <Task 
+          key={el.id} 
+          task={el} 
+          completeTask={() => store.completeTask(el.id)}
+          deleteTask={() => store.deleteTask(el.id)}
+          />
+       )) }
+       <TaskInput addTask={v => store.addTask(v)}/>
+      </div>
+    )
+  }
 }
 
-export default App;
+export default observer(App)
